@@ -33,5 +33,21 @@ app.get("/:searchparam", (req, res) => {
     });
 });
 
+app.get("/",(req,res)=>{
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    req.header("origin") ||
+      req.header("x-forwarded-host") ||
+      req.header("referer") ||
+      req.header("host")
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  res.send("hello");
+})
+
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
