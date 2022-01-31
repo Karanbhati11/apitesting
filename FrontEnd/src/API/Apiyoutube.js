@@ -63,6 +63,7 @@ function Apiyoutube() {
     <React.Fragment>
       <div className="container" style={{ backgroundColor: "black" }}>
         <form
+          onSubmit={(q) => {fetchHREF(q)}}
           style={{
             display: "flex",
             alignContent: "center",
@@ -83,11 +84,9 @@ function Apiyoutube() {
             }}
           />
           <button
+          type="submit"
             className="btn btn-primary"
             style={{ padding: "10px", margin: "10px" }}
-            onClick={(q) => {
-              fetchHREF(q);
-            }}
           >
             Submit
           </button>
