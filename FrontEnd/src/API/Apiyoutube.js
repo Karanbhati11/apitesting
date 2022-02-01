@@ -3,28 +3,27 @@ import { debounce, uniq } from "lodash";
 import axios from "axios";
 import YoutubeBody from "../Components/YoutubeBody";
 import Searchbar from "../Components/Searchbar";
-import '../App.css'
+import "../App.css";
 import Loader from "react-js-loader";
 
 function Apiyoutube() {
   const [ResponseData, setData] = useState(<h1>hello</h1>);
   const [VideoID, setVideoID] = useState([]);
   const [SearchParams, setSearchParams] = useState("");
+  const [IsLoading, setIsLoading] = useState(false);
   const URL = `http://localhost:8080/${SearchParams}`;
 
   const Fetcher = async () => {
-    console.log("FETTCHERR");
     // eslint-disable-next-line no-unused-vars
     const fetch = await axios.get(URL).then((res) => {
       const a = res.data;
       setData(a);
+      setIsLoading(false);
     });
   };
 
   const fetchHREF = (q) => {
     q.preventDefault();
-    console.log("HRREF");
-
     const a = ResponseData;
     const b = a.split(" ");
     // eslint-disable-next-line array-callback-return
@@ -59,28 +58,50 @@ function Apiyoutube() {
   };
 
   const ChangeHandler = debounce((e) => {
-    console.log("CHANGE");
     const b = e.target.value.split(" ").join("+");
     setSearchParams(b);
   }, 500);
 
   const SubmitHandler = (q) => {
     q.preventDefault();
+    setIsLoading(true);
     fetchHREF(q);
   };
 
+  const Clear = ()=>{
+    setSearchParams("");
+    setData("");
+    setVideoID([]);
+  }
+  
   useEffect(() => {
     Fetcher();
-    console.log("USEEFFECT");
+    // console.log("USEEFFECT");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [SearchParams]);
+  }, [SubmitHandler]);
   return (
     <React.Fragment>
       <div className="App" style={{ backgroundColor: "black" }}>
-        <Searchbar SubmitHandler={SubmitHandler} ChangeHandler ={ChangeHandler}/>
-        <div className="App" style={{ backgroundColor: "black" }}>
-          <YoutubeBody VideoID={VideoID} />
-        </div>
+        <Searchbar
+          SubmitHandler={SubmitHandler}
+          ChangeHandler={ChangeHandler}
+          Clear={Clear}
+          searchParams={SearchParams}
+        />
+
+        {IsLoading && (
+          <Loader
+            type="hourglass"
+            bgColor={"#FFFFFF"}
+            color={"#FFFFFF"}
+            size={100}
+          />
+        )}
+        {!IsLoading && (
+          <div className="App" style={{ backgroundColor: "black" }}>
+            <YoutubeBody VideoID={VideoID} />
+          </div>
+        )}
       </div>
     </React.Fragment>
   );
