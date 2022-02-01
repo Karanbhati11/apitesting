@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { uniq } from "lodash";
+import { debounce, uniq } from "lodash";
 import axios from "axios";
+import YoutubeBody from "../Components/YoutubeBody";
+import Searchbar from "../Components/Searchbar";
+import '../App.css'
+import Loader from "react-js-loader";
+
 function Apiyoutube() {
   const [ResponseData, setData] = useState(<h1>hello</h1>);
   const [VideoID, setVideoID] = useState([]);
   const [SearchParams, setSearchParams] = useState("");
   const URL = `http://localhost:8080/${SearchParams}`;
+
   const Fetcher = async () => {
+    console.log("FETTCHERR");
     // eslint-disable-next-line no-unused-vars
     const fetch = await axios.get(URL).then((res) => {
       const a = res.data;
@@ -16,6 +23,8 @@ function Apiyoutube() {
 
   const fetchHREF = (q) => {
     q.preventDefault();
+    console.log("HRREF");
+
     const a = ResponseData;
     const b = a.split(" ");
     // eslint-disable-next-line array-callback-return
@@ -46,73 +55,31 @@ function Apiyoutube() {
     });
     const g = uniq(f);
     const h = g.join(",").split(/[",]+/g).join(",").split(",");
-    setVideoID(h.slice(0,-1));
+    setVideoID(h.slice(0, -1));
+  };
+
+  const ChangeHandler = debounce((e) => {
+    console.log("CHANGE");
+    const b = e.target.value.split(" ").join("+");
+    setSearchParams(b);
+  }, 500);
+
+  const SubmitHandler = (q) => {
+    q.preventDefault();
+    fetchHREF(q);
   };
 
   useEffect(() => {
     Fetcher();
+    console.log("USEEFFECT");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [SearchParams]);
-
-  const ChangeHandler = (e) => {
-    const b = e.target.value.split(" ").join("+");
-    setSearchParams(b);
-  };
-
   return (
     <React.Fragment>
-      <div className="container" style={{ backgroundColor: "black" }}>
-        <form
-          onSubmit={(q) => {fetchHREF(q)}}
-          style={{
-            display: "flex",
-            alignContent: "center",
-            justifyContent: "center",
-          }}
-        >
-          <input
-            style={{ width: "200px", padding: "10px", margin: "10px" }}
-            className="form-control"
-            placeholder="Search Param"
-            id="exampleDataList1"
-            onChange={(e) => {
-              document
-                .getElementById("exampleDataList1")
-                .addEventListener("keyup", (e) => {
-                  ChangeHandler(e);
-                });
-            }}
-          />
-          <button
-          type="submit"
-            className="btn btn-primary"
-            style={{ padding: "10px", margin: "10px" }}
-          >
-            Submit
-          </button>
-        </form>
-        <div className="container" style={{ backgroundColor: "black" }}>
-          <div className="row" style={{ backgroundColor: "black" }}>
-            {VideoID.map((item) => {
-              return (
-                <div
-                  key={Math.random()}
-                  className="col-4 card"
-                  style={{ padding: "5px", backgroundColor:'grey' }}
-                >
-                  <iframe
-                    title="video"
-                    // width="560"
-                    height="315"
-                    src={`https://www.youtube.com/embed/${item}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              );
-            })}
-          </div>
+      <div className="App" style={{ backgroundColor: "black" }}>
+        <Searchbar SubmitHandler={SubmitHandler} ChangeHandler ={ChangeHandler}/>
+        <div className="App" style={{ backgroundColor: "black" }}>
+          <YoutubeBody VideoID={VideoID} />
         </div>
       </div>
     </React.Fragment>
