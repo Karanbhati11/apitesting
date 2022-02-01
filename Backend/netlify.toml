@@ -2,3 +2,8 @@
 
 functions = "functions"
 
+[[redirects]]
+
+from = '/'
+to = "/.netlify/functions/api"
+

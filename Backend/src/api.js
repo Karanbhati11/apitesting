@@ -48,6 +48,6 @@ router.get("/", (req, res) => {
   res.send("hello");
 });
 
-app.use("/.netlify/functions/api", router);
+app.use("/.netlify/functions/api/", router);
 
 module.exports.handler = serverless(app);
