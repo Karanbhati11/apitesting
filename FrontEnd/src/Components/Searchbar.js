@@ -1,5 +1,4 @@
 import React from 'react';
-// import '../../App.css';
 const Searchbar = React.memo(
   ({ SubmitHandler, ChangeHandler, Clear, searchParams }) => {
     return (

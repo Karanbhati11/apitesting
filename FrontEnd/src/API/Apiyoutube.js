@@ -11,11 +11,12 @@ function Apiyoutube() {
   const [VideoID, setVideoID] = useState([]);
   const [SearchParams, setSearchParams] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
-  const URL = `http://localhost:8080/${SearchParams}`;
+  const URL = `https://sleepy-mcclintock-53c848.netlify.app/.netlify/functions/api/${SearchParams}`;
 
   const Fetcher = async () => {
     // eslint-disable-next-line no-unused-vars
     const fetch = await axios.get(URL).then((res) => {
+      // console.log(res.data);
       const a = res.data;
       setData(a);
       setIsLoading(false);
@@ -54,6 +55,7 @@ function Apiyoutube() {
     });
     const g = uniq(f);
     const h = g.join(",").split(/[",]+/g).join(",").split(",");
+    console.log(h);
     setVideoID(h.slice(0, -1));
   };
 
