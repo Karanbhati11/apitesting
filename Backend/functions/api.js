@@ -12332,7 +12332,7 @@ app.init = function init() {
  */
 
 app.defaultConfiguration = function defaultConfiguration() {
-  var env = "development " || false;
+  var env = "production " || false;
 
   // default settings
   this.enable('x-powered-by');
@@ -12993,7 +12993,7 @@ function finalhandler (req, res, options) {
   var opts = options || {}
 
   // get environment
-  var env = opts.env || "development " || 'development'
+  var env = opts.env || "production " || 'development'
 
   // get error callback
   var onerror = opts.onerror
